@@ -1,0 +1,320 @@
+.directorio-contenedor {
+  max-width: 1050px;
+}
+
+.encabezado-directorio {
+  margin-bottom: 22px;
+}
+
+.encabezado-directorio h1 {
+  margin: 0 0 6px;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #111111;
+}
+
+.encabezado-directorio p {
+  margin: 0;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+/* Filtros */
+.filtros-barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.select-horario {
+  background-color: #7cc4fa;
+  color: #111111;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+}
+
+.buscador-caja {
+  position: relative;
+  width: 270px;
+}
+
+.buscador-caja input {
+  width: 100%;
+  padding: 9px 36px 9px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.buscador-caja input:focus {
+  border-color: #0052b4;
+}
+
+.icono-lupa {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Cards de Alumnos */
+.lista-alumnos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-alumno {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 18px 24px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.alumno-info h3 {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111111;
+}
+
+.alumno-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.alumno-botones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-historial {
+  background-color: #e2e8f0;
+  color: #111111;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 22px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-historial:hover {
+  background-color: #cbd5e1;
+}
+
+.btn-evaluacion {
+  background-color: #7cc4fa;
+  color: #111111;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 22px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-evaluacion:hover {
+  background-color: #5ab3f7;
+}
+
+.sin-resultados {
+  text-align: center;
+  color: #64748b;
+  padding: 24px;
+}
+
+/* Modales */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background-color: #e5e7eb;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Modal Historial */
+.modal-historial {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 720px;
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-historial h2 {
+  margin: 0 0 20px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #111111;
+}
+
+.resumen-historial {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.card-metrica {
+  background-color: #f1f5f9;
+  border-left: 4px solid #0052b4;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.metrica-titulo {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.metrica-valores {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.valor-anterior {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.valor-actual {
+  color: #0052b4;
+  font-size: 1.15rem;
+}
+
+.subtitulo-tabla {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111111;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+.tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+.tabla-historial th {
+  background-color: #0052b4;
+  color: #ffffff;
+  text-align: left;
+  padding: 10px 12px;
+}
+
+.tabla-historial td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+/* Modal Evaluación */
+.modal-evaluacion {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 460px;
+  border-radius: 12px;
+  padding: 28px 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.modal-evaluacion h2 {
+  margin: 0 0 20px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111111;
+  padding-right: 24px;
+}
+
+.form-evaluacion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-modal label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.campo-modal input,
+.campo-modal textarea {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.btn-guardar-cambios {
+  align-self: center;
+  margin-top: 6px;
+  background-color: #0052b4;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}

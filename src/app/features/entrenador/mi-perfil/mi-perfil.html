@@ -1,0 +1,78 @@
+<div class="perfil-contenedor">
+  <!-- Tarjeta Encabezado del Entrenador -->
+  <div class="card-cabecera">
+    <div class="avatar-grande">{{ inicial }}</div>
+    <div class="info-cabecera">
+      <h1>{{ nombreCompleto }}</h1>
+      <p class="rol-subtitulo">Entrenador Oficial</p>
+      <span class="badge-estado">Estado: {{ estado }}</span>
+    </div>
+  </div>
+
+  <!-- Formulario Información Personal -->
+  <div class="card-seccion">
+    <h2>Información Personal</h2>
+
+    <form (ngSubmit)="guardarCambios()" class="form-perfil">
+      <div class="campo-perfil">
+        <label for="nombreInput">Nombre Completo</label>
+        <input
+          id="nombreInput"
+          type="text"
+          name="nombreCompleto"
+          [(ngModel)]="nombreCompleto"
+          required />
+      </div>
+
+      <div class="campo-perfil">
+        <label for="especialidadInput">Especialidad</label>
+        <input
+          id="especialidadInput"
+          type="text"
+          name="especialidad"
+          [(ngModel)]="especialidad"
+          required />
+      </div>
+
+      <div class="campo-perfil">
+        <label for="telefonoInput">Teléfono de Contacto</label>
+        <input
+          id="telefonoInput"
+          type="text"
+          name="telefono"
+          [(ngModel)]="telefono"
+          required />
+      </div>
+
+      <button type="submit" class="btn-guardar">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <!-- Resumen de Actividad -->
+  <div class="card-seccion">
+    <h2>Resumen de Actividad</h2>
+
+    <div class="grid-actividad">
+      <div class="card-estadistica">
+        <span class="est-titulo">Clases Impartidas</span>
+        <span class="est-numero">{{ clasesImpartidas }}</span>
+      </div>
+
+      <div class="card-estadistica">
+        <span class="est-titulo">Evaluaciones Físicas Realizadas</span>
+        <span class="est-numero">{{ evaluacionesRealizadas }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal / Aviso de Confirmación -->
+  @if (mostrarConfirmacion) {
+    <div class="modal-overlay" (click)="cerrarConfirmacion()">
+      <div class="modal-exito" (click)="$event.stopPropagation()">
+        <button type="button" class="btn-cerrar" (click)="cerrarConfirmacion()">X</button>
+        <div class="icono-check">✔</div>
+        <p>Se guardaron los cambios correctamente</p>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,203 @@
+.login-fondo {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(15, 15, 15, 0.72), rgba(15, 15, 15, 0.78)),
+              url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 18px;
+  padding: 40px 45px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+/* Pestañas Administrador / Entrenador */
+.tabs-roles {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid #cccccc;
+  padding: 10px 8px;
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: #777777;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.activo {
+  background-color: #f7f3ea;
+  color: #111111;
+  border-bottom: 3px solid #111111;
+  font-weight: 600;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-grupo {
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-grupo label {
+  font-size: 0.98rem;
+  color: #222222;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.campo-grupo input {
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.campo-grupo input:focus {
+  border-color: #111111;
+}
+
+.btn-acceder {
+  align-self: center;
+  margin-top: 10px;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 36px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s;
+}
+
+.btn-acceder:hover {
+  background-color: #222222;
+  transform: scale(1.03);
+}
+
+.link-olvide {
+  align-self: center;
+  margin-top: 14px;
+  color: #111111;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Modal Reestablecer Contraseña */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-caja {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 14px;
+  padding: 34px 30px 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.btn-cerrar-modal {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #111111;
+}
+
+.btn-cerrar-modal:hover {
+  background: #d1d5db;
+}
+
+.modal-caja h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111111;
+}
+
+.modal-subtitulo {
+  margin: 0 0 18px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.input-modal {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.alerta-enviada {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+}
+
+.btn-reestablecer {
+  background-color: #0056b3;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reestablecer:hover {
+  background-color: #004494;
+}

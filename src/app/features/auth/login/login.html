@@ -1,1 +1,82 @@
-<p>login works!</p>
+<div class="login-fondo">
+  <div class="login-card">
+    <!-- Pestañas de Selección de Rol -->
+    <div class="tabs-roles">
+      <button
+        type="button"
+        class="tab-btn"
+        [class.activo]="rolSeleccionado === 'administrador'"
+        (click)="seleccionarRol('administrador')">
+        Administrador
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.activo]="rolSeleccionado === 'entrenador'"
+        (click)="seleccionarRol('entrenador')">
+        Entrenador
+      </button>
+    </div>
+
+    <!-- Formulario de Inicio de Sesión -->
+    <form (ngSubmit)="iniciarSesion()" class="login-form">
+      <div class="campo-grupo">
+        <label for="usuario">Usuario:</label>
+        <input
+          id="usuario"
+          type="text"
+          name="usuario"
+          [(ngModel)]="usuario"
+          placeholder="Nombre de usuario"
+          required />
+      </div>
+
+      <div class="campo-grupo">
+        <label for="password">Contraseña:</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Ingrese su contraseña"
+          required />
+      </div>
+
+      <button type="submit" class="btn-acceder">Acceder</button>
+
+      <a href="javascript:void(0)" class="link-olvide" (click)="abrirModalRecuperar()">
+        Olvidé mi contraseña
+      </a>
+    </form>
+  </div>
+
+  <!-- Modal: Reestablecer Contraseña -->
+  @if (mostrarModalRecuperar) {
+    <div class="modal-overlay" (click)="cerrarModalRecuperar()">
+      <div class="modal-caja" (click)="$event.stopPropagation()">
+        <button type="button" class="btn-cerrar-modal" (click)="cerrarModalRecuperar()">X</button>
+
+        <h2>REESTABLECER CONTRASEÑA</h2>
+        <p class="modal-subtitulo">Ingrese su correo electrónico</p>
+
+        <form (ngSubmit)="enviarSolicitudRecuperacion()">
+          <input
+            type="email"
+            name="correoRecuperacion"
+            [(ngModel)]="correoRecuperacion"
+            placeholder="Correo Electrónico"
+            class="input-modal"
+            required />
+
+          @if (solicitudEnviada) {
+            <div class="alerta-enviada">
+              Solicitud Enviada
+            </div>
+          }
+
+          <button type="submit" class="btn-reestablecer">Reestablecer</button>
+        </form>
+      </div>
+    </div>
+  }
+</div>

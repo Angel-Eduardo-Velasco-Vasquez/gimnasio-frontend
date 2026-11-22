@@ -1,0 +1,162 @@
+<div class="directorio-contenedor">
+  <!-- Encabezado -->
+  <div class="encabezado-directorio">
+    <h1>Directorio de Alumnos y Evaluaciones</h1>
+    <p>Consulta el expediente físico e historial de mediciones de tus alumnos</p>
+  </div>
+
+  <!-- Filtros: Horario de Clase y Buscador -->
+  <div class="filtros-barra">
+    <select [(ngModel)]="horarioSeleccionado" class="select-horario">
+      <option value="TODOS">Horario de Clase (Todos)</option>
+      <option value="8 am - CrossFit Avanzado">Clase de 8 am - CrossFit Avanzado</option>
+      <option value="10 am - Entrenamiento Funcional">Clase de 10 am - Entrenamiento Funcional</option>
+    </select>
+
+    <div class="buscador-caja">
+      <input
+        type="text"
+        [(ngModel)]="textoBusqueda"
+        placeholder="Buscar Alumno" />
+      <span class="icono-lupa">🔍</span>
+    </div>
+  </div>
+
+  <!-- Lista de Alumnos -->
+  <div class="lista-alumnos">
+    @for (alumno of alumnosFiltrados; track alumno.id) {
+      <div class="card-alumno">
+        <div class="alumno-info">
+          <h3>{{ alumno.nombre }}</h3>
+          <p>
+            Última Evaluación: {{ alumno.pesoActual }} kg | {{ alumno.grasaActual }}% de grasa ({{ alumno.haceCuanto }})
+          </p>
+        </div>
+
+        <div class="alumno-botones">
+          <button type="button" class="btn-historial" (click)="abrirHistorial(alumno)">
+            Historial
+          </button>
+          <button type="button" class="btn-evaluacion" (click)="abrirEvaluacion(alumno)">
+            Evaluación Física
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <p class="sin-resultados">No hay alumnos registrados para este filtro.</p>
+    }
+  </div>
+
+  <!-- Modal 1: Historial Físico -->
+  @if (modalHistorialAbierto && alumnoHistorial) {
+    <div class="modal-overlay" (click)="cerrarHistorial()">
+      <div class="modal-historial" (click)="$event.stopPropagation()">
+        <button type="button" class="btn-cerrar" (click)="cerrarHistorial()">X</button>
+
+        <h2>Historial Físico de {{ alumnoHistorial.nombre }}</h2>
+
+        <!-- 3 Tarjetas de Comparativa -->
+        <div class="resumen-historial">
+          <div class="card-metrica">
+            <span class="metrica-titulo">Peso Inicial vs Actual</span>
+            <div class="metrica-valores">
+              <span class="valor-anterior">{{ alumnoHistorial.pesoInicial }} kg</span>
+              <span class="flecha">→</span>
+              <span class="valor-actual">{{ alumnoHistorial.pesoActual }} kg</span>
+            </div>
+          </div>
+
+          <div class="card-metrica">
+            <span class="metrica-titulo">Grasa Corporal</span>
+            <div class="metrica-valores">
+              <span class="valor-anterior">{{ alumnoHistorial.grasaInicial }}%</span>
+              <span class="flecha">→</span>
+              <span class="valor-actual">{{ alumnoHistorial.grasaActual }}%</span>
+            </div>
+          </div>
+
+          <div class="card-metrica">
+            <span class="metrica-titulo">Total de Evaluaciones</span>
+            <div class="metrica-valores">
+              <span class="valor-actual">{{ alumnoHistorial.historial.length }} registros</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subtitulo-tabla">Registros de Evaluación</h3>
+
+        <div class="tabla-contenedor">
+          <table class="tabla-historial">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Peso (kg)</th>
+                <th>% Grasa</th>
+                <th>Notas del Entrenador</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (reg of alumnoHistorial.historial; track $index) {
+                <tr>
+                  <td>{{ reg.fecha }}</td>
+                  <td>{{ reg.peso }} kg</td>
+                  <td>{{ reg.grasa }}%</td>
+                  <td>{{ reg.notas }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Modal 2: Registrar Evaluación Física -->
+  @if (modalEvaluacionAbierto && alumnoEvaluacion) {
+    <div class="modal-overlay" (click)="cerrarEvaluacion()">
+      <div class="modal-evaluacion" (click)="$event.stopPropagation()">
+        <button type="button" class="btn-cerrar" (click)="cerrarEvaluacion()">X</button>
+
+        <h2>Registrar Evaluación Física de {{ alumnoEvaluacion.nombre }}</h2>
+
+        <form (ngSubmit)="guardarEvaluacion()" class="form-evaluacion">
+          <div class="campo-modal">
+            <label for="pesoDirInput">Peso (kg)</label>
+            <input
+              id="pesoDirInput"
+              type="number"
+              step="0.1"
+              name="nuevoPeso"
+              [(ngModel)]="nuevoPeso"
+              placeholder="Ej: 78.5"
+              required />
+          </div>
+
+          <div class="campo-modal">
+            <label for="grasaDirInput">Porcentaje de Grasa (%)</label>
+            <input
+              id="grasaDirInput"
+              type="number"
+              step="0.1"
+              name="nuevaGrasa"
+              [(ngModel)]="nuevaGrasa"
+              placeholder="Ej: 15"
+              required />
+          </div>
+
+          <div class="campo-modal">
+            <label for="notasDirInput">Notas del Entrenador</label>
+            <textarea
+              id="notasDirInput"
+              rows="3"
+              name="notasEntrenador"
+              [(ngModel)]="notasEntrenador"
+              placeholder="Observaciones de condición y rendimiento"></textarea>
+          </div>
+
+          <button type="submit" class="btn-guardar-cambios">Guardar Cambios</button>
+        </form>
+      </div>
+    </div>
+  }
+</div>

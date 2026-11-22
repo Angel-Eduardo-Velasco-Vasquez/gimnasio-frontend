@@ -1,0 +1,67 @@
+<div class="contenedor-principal">
+  <!-- Barra Lateral Negra -->
+  <aside class="sidebar" [class.oculto]="menuOculto">
+    <div class="logo-marca">
+      <span class="logo-texto">FitGym App</span>
+      <span class="logo-icono">🏋️</span>
+    </div>
+
+    <nav class="nav-botones">
+      <a
+        routerLink="/entrenador/clases-dia"
+        routerLinkActive="activo"
+        class="btn-nav">
+        Clases del día
+      </a>
+      <a
+        routerLink="/entrenador/mis-alumnos"
+        routerLinkActive="activo"
+        class="btn-nav">
+        Mis Alumnos
+      </a>
+      <a
+        routerLink="/entrenador/mi-perfil"
+        routerLinkActive="activo"
+        class="btn-nav">
+        Mi Perfil
+      </a>
+    </nav>
+
+    <button type="button" class="btn-ocultar-menu" (click)="alternarMenu()">
+      <span class="flecha-izq">⬅</span> OCULTAR MENÚ
+    </button>
+  </aside>
+
+  <!-- Área Principal Derecha -->
+  <div class="area-contenido">
+    <!-- Barra Superior -->
+    <header class="topbar">
+      <div class="topbar-izquierda">
+        @if (menuOculto) {
+          <button type="button" class="btn-mostrar-menu" (click)="alternarMenu()">
+            Mostrar Menú ➡
+          </button>
+        }
+      </div>
+
+      <div class="perfil-dropdown">
+        <button type="button" class="btn-usuario" (click)="alternarDropdownUsuario()">
+          <span class="avatar-circulo">👤</span>
+          <span>{{ nombreEntrenador }}</span>
+          <span class="flecha-abajo">▼</span>
+        </button>
+
+        @if (dropdownUsuarioAbierto) {
+          <button type="button" class="btn-cerrar-sesion" (click)="cerrarSesion()">
+            Cerrar Sesión
+          </button>
+        }
+      </div>
+    </header>
+
+    <!-- Aquí se cargan Clases del Día, Pase de Lista, Mis Alumnos o Mi Perfil -->
+    <main class="vista-dinamica">
+      <router-outlet />
+    </main>
+  </div>
+</div>

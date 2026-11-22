@@ -1,0 +1,116 @@
+<div class="pase-contenedor">
+  <!-- Botón Volver -->
+  <button type="button" class="btn-volver" (click)="volverAClases()">
+    ⬅ VOLVER A "Clases del Día"
+  </button>
+
+  <!-- Encabezado de la Clase -->
+  <div class="encabezado-clase">
+    <div>
+      <h1>{{ claseActual.titulo }}</h1>
+      <p class="fecha-clase">Fecha: {{ claseActual.fecha }}</p>
+    </div>
+    <div class="badge-inscritos">
+      Alumnos Inscritos: {{ claseActual.inscritos }}/{{ claseActual.cupoMaximo }} Alumnos
+    </div>
+  </div>
+
+  <!-- Subtítulo y Buscador -->
+  <div class="barra-herramientas">
+    <h2>Pase de Lista y Estado Físico</h2>
+    <div class="buscador-caja">
+      <input
+        type="text"
+        [(ngModel)]="textoBusqueda"
+        placeholder="Buscar Alumno" />
+      <span class="icono-lupa">🔍</span>
+    </div>
+  </div>
+
+  <!-- Lista de Alumnos -->
+  <div class="lista-alumnos">
+    @for (alumno of alumnosFiltrados; track alumno.id) {
+      <div class="card-alumno">
+        <div class="alumno-datos">
+          <h3>{{ alumno.nombre }}</h3>
+          <p>
+            Última Evaluación: {{ alumno.peso }} kg | {{ alumno.grasa }}% de grasa ({{ alumno.haceCuanto }})
+          </p>
+        </div>
+
+        <div class="alumno-acciones">
+          <!-- Selector de Asistencia -->
+          <select
+            [(ngModel)]="alumno.asistencia"
+            class="select-asistencia"
+            [class.asistio]="alumno.asistencia === 'Asistió'"
+            [class.no-asistio]="alumno.asistencia === 'No asistió'"
+            [class.pendiente]="alumno.asistencia === 'Pendiente'">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Asistió">Asistió</option>
+            <option value="No asistió">No asistió</option>
+          </select>
+
+          <!-- Botón Evaluación Física -->
+          <button
+            type="button"
+            class="btn-evaluacion"
+            (click)="abrirModalEvaluacion(alumno)">
+            Evaluación Física
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <p class="sin-resultados">No se encontraron alumnos con ese nombre.</p>
+    }
+  </div>
+
+  <!-- Modal: Registrar Evaluación Física -->
+  @if (modalEvaluacionAbierto && alumnoSeleccionado) {
+    <div class="modal-overlay" (click)="cerrarModalEvaluacion()">
+      <div class="modal-caja" (click)="$event.stopPropagation()">
+        <button type="button" class="btn-cerrar" (click)="cerrarModalEvaluacion()">X</button>
+
+        <h2>Registrar Evaluación Física de {{ alumnoSeleccionado.nombre }}</h2>
+
+        <form (ngSubmit)="guardarEvaluacion()" class="form-evaluacion">
+          <div class="campo-modal">
+            <label for="pesoInput">Peso (kg)</label>
+            <input
+              id="pesoInput"
+              type="number"
+              step="0.1"
+              name="nuevoPeso"
+              [(ngModel)]="nuevoPeso"
+              placeholder="Ej: 78.5"
+              required />
+          </div>
+
+          <div class="campo-modal">
+            <label for="grasaInput">Porcentaje de Grasa (%)</label>
+            <input
+              id="grasaInput"
+              type="number"
+              step="0.1"
+              name="nuevaGrasa"
+              [(ngModel)]="nuevaGrasa"
+              placeholder="Ej: 15"
+              required />
+          </div>
+
+          <div class="campo-modal">
+            <label for="notasInput">Notas del Entrenador</label>
+            <textarea
+              id="notasInput"
+              rows="3"
+              name="notasEntrenador"
+              [(ngModel)]="notasEntrenador"
+              placeholder="Observaciones de condición y rendimiento"></textarea>
+          </div>
+
+          <button type="submit" class="btn-guardar-cambios">Guardar Cambios</button>
+        </form>
+      </div>
+    </div>
+  }
+</div>
