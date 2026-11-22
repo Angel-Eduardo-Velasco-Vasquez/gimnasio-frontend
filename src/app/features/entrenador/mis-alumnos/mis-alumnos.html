@@ -1,36 +1,41 @@
 <div class="directorio-contenedor">
-  <!-- Encabezado -->
   <div class="encabezado-directorio">
     <h1>Directorio de Alumnos y Evaluaciones</h1>
     <p>Consulta el expediente físico e historial de mediciones de tus alumnos</p>
   </div>
 
-  <!-- Filtros: Horario de Clase y Buscador -->
   <div class="filtros-barra">
-    <select [(ngModel)]="horarioSeleccionado" class="select-horario">
-      <option value="TODOS">Horario de Clase (Todos)</option>
-      <option value="8 am - CrossFit Avanzado">Clase de 8 am - CrossFit Avanzado</option>
-      <option value="10 am - Entrenamiento Funcional">Clase de 10 am - Entrenamiento Funcional</option>
+    <select [(ngModel)]="sesionSeleccionada" (change)="buscarAlumnos()" class="select-horario">
+      <option [ngValue]="undefined">Horario de Clase (Todos)</option>
+      @for (c of clasesDisponibles; track c.idSesion) {
+        <option [ngValue]="c.idSesion">{{ c.nombre }}</option>
+      }
     </select>
 
     <div class="buscador-caja">
       <input
         type="text"
         [(ngModel)]="textoBusqueda"
+        (input)="buscarAlumnos()"
         placeholder="Buscar Alumno" />
       <span class="icono-lupa">🔍</span>
     </div>
   </div>
 
-  <!-- Lista de Alumnos -->
   <div class="lista-alumnos">
-    @for (alumno of alumnosFiltrados; track alumno.id) {
+    @for (alumno of alumnos; track alumno.idCliente) {
       <div class="card-alumno">
         <div class="alumno-info">
           <h3>{{ alumno.nombre }}</h3>
-          <p>
-            Última Evaluación: {{ alumno.pesoActual }} kg | {{ alumno.grasaActual }}% de grasa ({{ alumno.haceCuanto }})
-          </p>
+          @if (alumno.ultimaEvaluacion) {
+            <p>
+              Última Evaluación: {{ alumno.ultimaEvaluacion.pesoKg }} kg |
+              {{ alumno.ultimaEvaluacion.porcentajeGrasa }}% de grasa
+              ({{ alumno.ultimaEvaluacion.fecha }})
+            </p>
+          } @else {
+            <p>Sin evaluaciones físicas registradas aún</p>
+          }
         </div>
 
         <div class="alumno-botones">
@@ -47,71 +52,82 @@
     }
   </div>
 
-  <!-- Modal 1: Historial Físico -->
-  @if (modalHistorialAbierto && alumnoHistorial) {
+  @if (modalHistorialAbierto) {
     <div class="modal-overlay" (click)="cerrarHistorial()">
       <div class="modal-historial" (click)="$event.stopPropagation()">
         <button type="button" class="btn-cerrar" (click)="cerrarHistorial()">X</button>
 
-        <h2>Historial Físico de {{ alumnoHistorial.nombre }}</h2>
+        <h2>Historial Físico de {{ alumnoHistorialNombre }}</h2>
 
-        <!-- 3 Tarjetas de Comparativa -->
-        <div class="resumen-historial">
-          <div class="card-metrica">
-            <span class="metrica-titulo">Peso Inicial vs Actual</span>
-            <div class="metrica-valores">
-              <span class="valor-anterior">{{ alumnoHistorial.pesoInicial }} kg</span>
-              <span class="flecha">→</span>
-              <span class="valor-actual">{{ alumnoHistorial.pesoActual }} kg</span>
+        @if (historialActual) {
+          <div class="resumen-historial">
+            <div class="card-metrica">
+              <span class="metrica-titulo">Peso Inicial vs Actual</span>
+              <div class="metrica-valores">
+                @if (historialActual.pesoInicial !== undefined) {
+                  <span class="valor-anterior">{{ historialActual.pesoInicial }} kg</span>
+                  <span class="flecha">→</span>
+                  <span class="valor-actual">{{ historialActual.pesoActual }} kg</span>
+                } @else {
+                  <span class="valor-anterior">Sin registros</span>
+                }
+              </div>
+            </div>
+
+            <div class="card-metrica">
+              <span class="metrica-titulo">Grasa Corporal Actual</span>
+              <div class="metrica-valores">
+                @if (historialActual.grasaActual !== undefined) {
+                  <span class="valor-actual">{{ historialActual.grasaActual }}%</span>
+                } @else {
+                  <span class="valor-anterior">Sin registros</span>
+                }
+              </div>
+            </div>
+
+            <div class="card-metrica">
+              <span class="metrica-titulo">Total de Evaluaciones</span>
+              <div class="metrica-valores">
+                <span class="valor-actual">{{ historialActual.totalRegistros }} registros</span>
+              </div>
             </div>
           </div>
 
-          <div class="card-metrica">
-            <span class="metrica-titulo">Grasa Corporal</span>
-            <div class="metrica-valores">
-              <span class="valor-anterior">{{ alumnoHistorial.grasaInicial }}%</span>
-              <span class="flecha">→</span>
-              <span class="valor-actual">{{ alumnoHistorial.grasaActual }}%</span>
-            </div>
-          </div>
+          <h3 class="subtitulo-tabla">Registros de Evaluación</h3>
 
-          <div class="card-metrica">
-            <span class="metrica-titulo">Total de Evaluaciones</span>
-            <div class="metrica-valores">
-              <span class="valor-actual">{{ alumnoHistorial.historial.length }} registros</span>
-            </div>
-          </div>
-        </div>
-
-        <h3 class="subtitulo-tabla">Registros de Evaluación</h3>
-
-        <div class="tabla-contenedor">
-          <table class="tabla-historial">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Peso (kg)</th>
-                <th>% Grasa</th>
-                <th>Notas del Entrenador</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (reg of alumnoHistorial.historial; track $index) {
+          <div class="tabla-contenedor">
+            <table class="tabla-historial">
+              <thead>
                 <tr>
-                  <td>{{ reg.fecha }}</td>
-                  <td>{{ reg.peso }} kg</td>
-                  <td>{{ reg.grasa }}%</td>
-                  <td>{{ reg.notas }}</td>
+                  <th>Fecha</th>
+                  <th>Peso (kg)</th>
+                  <th>% Grasa</th>
+                  <th>Notas del Entrenador</th>
                 </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                @for (reg of historialActual.evaluaciones; track reg.idEvaluacion) {
+                  <tr>
+                    <td>{{ reg.fecha }}</td>
+                    <td>{{ reg.pesoKg }} kg</td>
+                    <td>{{ reg.porcentajeGrasa }}%</td>
+                    <td>{{ reg.notas || 'Sin notas' }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="4" style="text-align: center;">Este alumno aún no tiene evaluaciones.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p>Cargando historial...</p>
+        }
       </div>
     </div>
   }
 
-  <!-- Modal 2: Registrar Evaluación Física -->
   @if (modalEvaluacionAbierto && alumnoEvaluacion) {
     <div class="modal-overlay" (click)="cerrarEvaluacion()">
       <div class="modal-evaluacion" (click)="$event.stopPropagation()">

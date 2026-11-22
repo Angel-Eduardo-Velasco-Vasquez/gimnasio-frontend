@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { ApiService } from '../../../core/services/api';
 
 @Component({
   selector: 'app-layout',
@@ -9,12 +10,23 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './layout.html',
   styleUrl: './layout.css'
 })
-export class Layout {
+export class Layout implements OnInit {
   menuOculto: boolean = false;
   dropdownUsuarioAbierto: boolean = false;
-  nombreEntrenador: string = 'Carlos Beltrán';
+  nombreEntrenador: string = 'Entrenador';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
+
+  ngOnInit(): void {
+    this.api.getPerfil().subscribe({
+      next: (perfil) => (this.nombreEntrenador = perfil.nombre),
+      error: (err) => {
+        if (err.status === 401) {
+          this.router.navigate(['/login']);
+        }
+      }
+    });
+  }
 
   alternarMenu(): void {
     this.menuOculto = !this.menuOculto;
@@ -26,6 +38,9 @@ export class Layout {
 
   cerrarSesion(): void {
     this.dropdownUsuarioAbierto = false;
-    this.router.navigate(['/login']);
+    this.api.logout().subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login'])
+    });
   }
 }

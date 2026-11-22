@@ -1,17 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
-interface ClaseProgramada {
-  id: number;
-  horario: string;
-  nombre: string;
-  area: string;
-  duracion: string;
-  inscritos: number;
-  cupoMaximo: number;
-  colorCupo: 'amarillo' | 'verde';
-}
+import { ApiService, ClaseHoy } from '../../../core/services/api';
 
 @Component({
   selector: 'app-clases-dia',
@@ -20,40 +10,52 @@ interface ClaseProgramada {
   templateUrl: './clases-dia.html',
   styleUrl: './clases-dia.css'
 })
-export class ClasesDia {
-  nombreEntrenador: string = 'Carlos';
-  especialidad: string = 'CrossFit';
+export class ClasesDia implements OnInit {
+  nombreEntrenador: string = '';
+  especialidad: string = '';
+  totalAlumnos: number = 0;
+  clasesHoy: ClaseHoy[] = [];
+  cargando: boolean = true;
 
-  clasesHoy: ClaseProgramada[] = [
-    {
-      id: 1,
-      horario: '8 a.m',
-      nombre: 'CrossFit Avanzado',
-      area: 'Área Zona A (Principal)',
-      duracion: '60 min',
-      inscritos: 12,
-      cupoMaximo: 15,
-      colorCupo: 'amarillo'
-    },
-    {
-      id: 2,
-      horario: '10 a.m',
-      nombre: 'Entrenamiento Funcional',
-      area: 'Área Zona B',
-      duracion: '60 min',
-      inscritos: 8,
-      cupoMaximo: 15,
-      colorCupo: 'verde'
-    }
-  ];
+  constructor(private router: Router, private api: ApiService) {}
 
-  constructor(private router: Router) {}
+  ngOnInit(): void {
+    this.api.getPerfil().subscribe({
+      next: (perfil) => {
+        this.nombreEntrenador = perfil.nombre;
+        this.especialidad = perfil.especialidad;
+        this.totalAlumnos = perfil.totalAlumnos;
+      },
+      error: (err) => {
+        if (err.status === 401) this.router.navigate(['/login']);
+      }
+    });
 
-  get totalAlumnosHoy(): number {
-    return this.clasesHoy.reduce((total, c) => total + c.inscritos, 0);
+    this.api.getClasesHoy().subscribe({
+      next: (clases) => {
+        this.clasesHoy = clases;
+        this.cargando = false;
+      },
+      error: (err) => {
+        this.cargando = false;
+        if (err.status === 401) this.router.navigate(['/login']);
+      }
+    });
   }
 
-  irATomarAsistencia(idClase: number): void {
-    this.router.navigate(['/entrenador/pase-lista', idClase]);
+  formatearHora(fechaHora: string): string {
+    if (!fechaHora || !fechaHora.includes('T')) return fechaHora;
+    const horaStr = fechaHora.split('T')[1]; // ej. "19:00"
+    const [hStr, mStr] = horaStr.split(':');
+    const h = Number(hStr);
+    const sufijo = h >= 12 ? 'p.m' : 'a.m';
+    const hora12 = h % 12 === 0 ? 12 : h % 12;
+    return mStr === '00' ? `${hora12} ${sufijo}` : `${hora12}:${mStr} ${sufijo}`;
+  }
+
+  irATomarAsistencia(clase: ClaseHoy): void {
+    this.router.navigate(['/entrenador/pase-lista', clase.idHorario, clase.idSesion], {
+      state: { clase }
+    });
   }
 }

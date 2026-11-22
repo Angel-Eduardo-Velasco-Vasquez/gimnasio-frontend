@@ -17,9 +17,10 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'clases-dia', pathMatch: 'full' },
       { path: 'clases-dia', component: ClasesDia },
-      { path: 'pase-lista/:idClase', component: PaseLista },
+      { path: 'pase-lista/:idHorario/:idSesion', component: PaseLista },
       { path: 'mis-alumnos', component: MisAlumnos },
       { path: 'mi-perfil', component: MiPerfil }
+      
     ]
   },
   { path: '**', redirectTo: 'login' }

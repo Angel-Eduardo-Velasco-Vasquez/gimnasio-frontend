@@ -1,21 +1,24 @@
 <div class="pase-contenedor">
-  <!-- Botón Volver -->
   <button type="button" class="btn-volver" (click)="volverAClases()">
     ⬅ VOLVER A "Clases del Día"
   </button>
 
-  <!-- Encabezado de la Clase -->
   <div class="encabezado-clase">
     <div>
-      <h1>{{ claseActual.titulo }}</h1>
-      <p class="fecha-clase">Fecha: {{ claseActual.fecha }}</p>
+      <h1>{{ infoClase ? infoClase.nombre : 'Clase #' + idSesion }}</h1>
+      @if (infoClase) {
+        <p class="fecha-clase">Fecha y hora: {{ infoClase.fechaHora }}</p>
+      }
     </div>
     <div class="badge-inscritos">
-      Alumnos Inscritos: {{ claseActual.inscritos }}/{{ claseActual.cupoMaximo }} Alumnos
+      Alumnos Inscritos: {{ alumnos.length }}@if (infoClase) {/{{ infoClase.capacidadMaxima }}} Alumnos
     </div>
   </div>
 
-  <!-- Subtítulo y Buscador -->
+  @if (mensajeError) {
+    <p style="color: #dc2626; font-weight: 700;">{{ mensajeError }}</p>
+  }
+
   <div class="barra-herramientas">
     <h2>Pase de Lista y Estado Físico</h2>
     <div class="buscador-caja">
@@ -27,31 +30,27 @@
     </div>
   </div>
 
-  <!-- Lista de Alumnos -->
   <div class="lista-alumnos">
-    @for (alumno of alumnosFiltrados; track alumno.id) {
+    @for (alumno of alumnosFiltrados; track alumno.idCliente) {
       <div class="card-alumno">
         <div class="alumno-datos">
           <h3>{{ alumno.nombre }}</h3>
-          <p>
-            Última Evaluación: {{ alumno.peso }} kg | {{ alumno.grasa }}% de grasa ({{ alumno.haceCuanto }})
-          </p>
+          <p>ID Cliente: #{{ alumno.idCliente }}</p>
         </div>
 
         <div class="alumno-acciones">
-          <!-- Selector de Asistencia -->
           <select
-            [(ngModel)]="alumno.asistencia"
+            [(ngModel)]="alumno.estado"
+            (change)="cambiarAsistencia(alumno)"
             class="select-asistencia"
-            [class.asistio]="alumno.asistencia === 'Asistió'"
-            [class.no-asistio]="alumno.asistencia === 'No asistió'"
-            [class.pendiente]="alumno.asistencia === 'Pendiente'">
-            <option value="Pendiente">Pendiente</option>
-            <option value="Asistió">Asistió</option>
-            <option value="No asistió">No asistió</option>
+            [class.asistio]="alumno.estado === 'ASISTIO'"
+            [class.no-asistio]="alumno.estado === 'NO_ASISTIO'"
+            [class.pendiente]="alumno.estado === 'PENDIENTE'">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="ASISTIO">Asistió</option>
+            <option value="NO_ASISTIO">No asistió</option>
           </select>
 
-          <!-- Botón Evaluación Física -->
           <button
             type="button"
             class="btn-evaluacion"
@@ -61,11 +60,10 @@
         </div>
       </div>
     } @empty {
-      <p class="sin-resultados">No se encontraron alumnos con ese nombre.</p>
+      <p class="sin-resultados">No hay alumnos inscritos en esta clase.</p>
     }
   </div>
 
-  <!-- Modal: Registrar Evaluación Física -->
   @if (modalEvaluacionAbierto && alumnoSeleccionado) {
     <div class="modal-overlay" (click)="cerrarModalEvaluacion()">
       <div class="modal-caja" (click)="$event.stopPropagation()">

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../../../core/services/api';
 
 @Component({
   selector: 'app-login',
@@ -14,25 +15,39 @@ export class Login {
   rolSeleccionado: 'administrador' | 'entrenador' = 'entrenador';
   usuario: string = '';
   password: string = '';
+  mensajeError: string = '';
+  cargando: boolean = false;
 
-  // Control del modal de recuperación de contraseña
   mostrarModalRecuperar: boolean = false;
   correoRecuperacion: string = '';
   solicitudEnviada: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
 
   seleccionarRol(rol: 'administrador' | 'entrenador'): void {
     this.rolSeleccionado = rol;
+    this.mensajeError = '';
   }
 
   iniciarSesion(): void {
-    // Aquí luego conectaremos con el ApiService del backend
-    if (this.rolSeleccionado === 'entrenador') {
-      this.router.navigate(['/entrenador/clases-dia']);
-    } else {
-      this.router.navigate(['/admin']);
-    }
+    this.mensajeError = '';
+    this.cargando = true;
+    const rolApi = this.rolSeleccionado === 'entrenador' ? 'ENTRENADOR' : 'ADMIN';
+
+    this.api.login(this.usuario, this.password, rolApi).subscribe({
+      next: () => {
+        this.cargando = false;
+        if (rolApi === 'ENTRENADOR') {
+          this.router.navigate(['/entrenador/clases-dia']);
+        } else {
+          this.router.navigate(['/admin']);
+        }
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.mensajeError = err.error?.error || 'No se pudo conectar con el servidor (verifica que Tomcat esté encendido).';
+      }
+    });
   }
 
   abrirModalRecuperar(): void {
@@ -48,7 +63,10 @@ export class Login {
 
   enviarSolicitudRecuperacion(): void {
     if (this.correoRecuperacion.trim()) {
-      this.solicitudEnviada = true;
+      this.api.solicitarRestablecimiento(this.correoRecuperacion.trim()).subscribe({
+        next: () => (this.solicitudEnviada = true),
+        error: () => (this.solicitudEnviada = true)
+      });
     }
   }
 }

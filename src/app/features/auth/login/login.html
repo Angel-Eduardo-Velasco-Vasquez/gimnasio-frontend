@@ -42,6 +42,7 @@
           required />
       </div>
 
+    @if (mensajeError) { <p style="color:#dc2626; font-weight:600; text-align:center;">{{ mensajeError }}</p> }
       <button type="submit" class="btn-acceder">Acceder</button>
 
       <a href="javascript:void(0)" class="link-olvide" (click)="abrirModalRecuperar()">

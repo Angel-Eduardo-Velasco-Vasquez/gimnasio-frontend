@@ -1,11 +1,9 @@
 <div class="clases-contenedor">
-  <!-- Banner Amarillo de Bienvenida -->
   <div class="banner-bienvenida">
     <h1>Bienvenido Entrenador {{ nombreEntrenador }}</h1>
     <p>Aquí tienes el resumen de tus actividades para el día de hoy</p>
   </div>
 
-  <!-- 3 Tarjetas Azul Cielo de Resumen -->
   <div class="tarjetas-resumen">
     <div class="card-resumen">
       <span class="resumen-titulo">Clases de Hoy</span>
@@ -14,7 +12,7 @@
 
     <div class="card-resumen">
       <span class="resumen-titulo">Total de Alumnos</span>
-      <span class="resumen-valor">{{ totalAlumnosHoy }}</span>
+      <span class="resumen-valor">{{ totalAlumnos }}</span>
     </div>
 
     <div class="card-resumen">
@@ -23,30 +21,36 @@
     </div>
   </div>
 
-  <!-- Horarios Programados Hoy -->
   <h2 class="seccion-titulo">Horarios Programados Hoy</h2>
 
   <div class="lista-horarios">
-    @for (clase of clasesHoy; track clase.id) {
+    @for (clase of clasesHoy; track clase.idHorario + '-' + clase.idSesion) {
       <div class="card-horario">
         <div class="horario-info">
-          <h3>{{ clase.horario }} - {{ clase.nombre }}</h3>
-          <p class="horario-detalle">{{ clase.area }} | Duración: {{ clase.duracion }}</p>
+          <h3>{{ formatearHora(clase.fechaHora) }} - {{ clase.nombre }}</h3>
+          <p class="horario-detalle">
+            @if (clase.area) {
+              Área {{ clase.area }} |
+            }
+            Duración: {{ clase.duracionMinutos }} min
+          </p>
           <span
             class="badge-cupo"
-            [class.amarillo]="clase.colorCupo === 'amarillo'"
-            [class.verde]="clase.colorCupo === 'verde'">
-            Cupo: {{ clase.inscritos }}/{{ clase.cupoMaximo }} Alumnos
+            [class.amarillo]="clase.inscritos >= clase.capacidadMaxima * 0.75"
+            [class.verde]="clase.inscritos < clase.capacidadMaxima * 0.75">
+            Cupo: {{ clase.inscritos }}/{{ clase.capacidadMaxima }} Alumnos
           </span>
         </div>
 
         <button
           type="button"
           class="btn-asistencia"
-          (click)="irATomarAsistencia(clase.id)">
+          (click)="irATomarAsistencia(clase)">
           Tomar Asistencia
         </button>
       </div>
+    } @empty {
+      <p style="color: #64748b;">No tienes clases programadas para hoy.</p>
     }
   </div>
 </div>
