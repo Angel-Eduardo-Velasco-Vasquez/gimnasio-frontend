@@ -270,7 +270,7 @@
   border-color: #0052b4;
 }
 
-.btn-guardar-cambios {
+.btn-guardar-eval {
   align-self: center;
   margin-top: 6px;
   background-color: #0052b4;
@@ -283,6 +283,6 @@
   cursor: pointer;
 }
 
-.btn-guardar-cambios:hover {
+.btn-guardar-eval:hover {
   background-color: #003e8a;
 }

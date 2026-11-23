@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -35,11 +35,18 @@ export class MisAlumnos implements OnInit {
   nuevaGrasa: number | null = null;
   notasEntrenador: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.api.getClasesHoy().subscribe({
-      next: (clases) => (this.clasesDisponibles = clases),
+      next: (clases) => {
+        this.clasesDisponibles = clases;
+        this.cdr.detectChanges();
+      },
       error: () => {}
     });
     this.buscarAlumnos();
@@ -47,7 +54,10 @@ export class MisAlumnos implements OnInit {
 
   buscarAlumnos(): void {
     this.api.getAlumnos(this.textoBusqueda, this.sesionSeleccionada).subscribe({
-      next: (lista) => (this.alumnos = lista),
+      next: (lista) => {
+        this.alumnos = lista;
+        this.cdr.detectChanges();
+      },
       error: (err) => {
         if (err.status === 401) this.router.navigate(['/login']);
       }
@@ -60,7 +70,10 @@ export class MisAlumnos implements OnInit {
     this.modalHistorialAbierto = true;
 
     this.api.getEvaluacionesCliente(alumno.idCliente).subscribe({
-      next: (data) => (this.historialActual = data),
+      next: (data) => {
+        this.historialActual = data;
+        this.cdr.detectChanges();
+      },
       error: (err) => alert(err.error?.error || 'No se pudo cargar el historial.')
     });
   }
@@ -83,20 +96,27 @@ export class MisAlumnos implements OnInit {
     this.alumnoEvaluacion = null;
   }
 
+  get evaluacionValida(): boolean {
+    const pesoOk = this.nuevoPeso !== null && this.nuevoPeso >= 25 && this.nuevoPeso <= 300;
+    const grasaOk = this.nuevaGrasa !== null && this.nuevaGrasa >= 2 && this.nuevaGrasa <= 70;
+    return pesoOk && grasaOk;
+  }
+
   guardarEvaluacion(): void {
-    if (!this.alumnoEvaluacion || this.nuevoPeso === null || this.nuevaGrasa === null) return;
+    if (!this.alumnoEvaluacion || !this.evaluacionValida) return;
 
     this.api
       .registrarEvaluacion({
         idCliente: this.alumnoEvaluacion.idCliente,
-        pesoKg: this.nuevoPeso,
-        porcentajeGrasa: this.nuevaGrasa,
-        notas: this.notasEntrenador.trim() || undefined
+        pesoKg: Number(this.nuevoPeso),
+        porcentajeGrasa: Number(this.nuevaGrasa),
+        notas: this.notasEntrenador.trim().slice(0, 250) || undefined
       })
       .subscribe({
         next: () => {
           this.cerrarEvaluacion();
           this.buscarAlumnos();
+          this.cdr.detectChanges();
         },
         error: (err) => alert(err.error?.error || 'Error al registrar la evaluación.')
       });

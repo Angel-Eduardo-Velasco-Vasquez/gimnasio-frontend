@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService, ClaseHoy } from '../../../core/services/api';
@@ -17,7 +17,11 @@ export class ClasesDia implements OnInit {
   clasesHoy: ClaseHoy[] = [];
   cargando: boolean = true;
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(
+    private router: Router,
+    private api: ApiService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.api.getPerfil().subscribe({
@@ -25,6 +29,7 @@ export class ClasesDia implements OnInit {
         this.nombreEntrenador = perfil.nombre;
         this.especialidad = perfil.especialidad;
         this.totalAlumnos = perfil.totalAlumnos;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         if (err.status === 401) this.router.navigate(['/login']);
@@ -35,9 +40,11 @@ export class ClasesDia implements OnInit {
       next: (clases) => {
         this.clasesHoy = clases;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.cargando = false;
+        this.cdr.detectChanges();
         if (err.status === 401) this.router.navigate(['/login']);
       }
     });
@@ -45,7 +52,7 @@ export class ClasesDia implements OnInit {
 
   formatearHora(fechaHora: string): string {
     if (!fechaHora || !fechaHora.includes('T')) return fechaHora;
-    const horaStr = fechaHora.split('T')[1]; // ej. "19:00"
+    const horaStr = fechaHora.split('T')[1];
     const [hStr, mStr] = horaStr.split(':');
     const h = Number(hStr);
     const sufijo = h >= 12 ? 'p.m' : 'a.m';

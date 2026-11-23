@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,13 +16,21 @@ export class MiPerfil implements OnInit {
   especialidad: string = '';
   telefono: string = '';
   estado: string = 'Activo';
+  avisoNombre: string = '';
+  avisoEspecialidad: string = '';
+  avisoTelefono: string = '';
 
   clasesImpartidas: number = 0;
   evaluacionesRealizadas: number = 0;
 
   mostrarConfirmacion: boolean = false;
+  mensajeError: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.api.getPerfil().subscribe({
@@ -33,6 +41,7 @@ export class MiPerfil implements OnInit {
         this.estado = perfil.estado ? 'Activo' : 'Inactivo';
         this.clasesImpartidas = perfil.clasesImpartidas;
         this.evaluacionesRealizadas = perfil.evaluacionesRealizadas;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         if (err.status === 401) this.router.navigate(['/login']);
@@ -44,14 +53,49 @@ export class MiPerfil implements OnInit {
     return this.nombreCompleto.trim().charAt(0).toUpperCase() || 'E';
   }
 
+ filtrarSoloLetras(campo: 'nombreCompleto' | 'especialidad'): void {
+    const original = this[campo];
+    const limpio = original.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+    this[campo] = limpio;
+
+    const mensaje = original !== limpio ? 'Solo se permiten letras y espacios.' : '';
+    if (campo === 'nombreCompleto') this.avisoNombre = mensaje;
+    if (campo === 'especialidad') this.avisoEspecialidad = mensaje;
+  }
+
+  filtrarSoloNumeros(): void {
+    const original = this.telefono;
+    const limpio = original.replace(/\D/g, '').slice(0, 10);
+    this.telefono = limpio;
+
+    if (/\D/.test(original)) {
+      this.avisoTelefono = 'Solo se permiten números (10 dígitos).';
+    } else if (limpio.length > 0 && limpio.length < 10) {
+      this.avisoTelefono = `Faltan ${10 - limpio.length} dígitos para completar los 10.`;
+    } else {
+      this.avisoTelefono = '';
+    }
+  }
+
+  get formularioValido(): boolean {
+    const nombreOk = this.nombreCompleto.trim().length >= 3;
+    const espOk = this.especialidad.trim().length >= 3;
+    const telOk = /^\d{10}$/.test(this.telefono);
+    return nombreOk && espOk && telOk;
+  }
+
   guardarCambios(): void {
-    const soloDigitosTelefono = this.telefono.replace(/\D/g, '');
+    this.mensajeError = '';
+    if (!this.formularioValido) {
+      this.mensajeError = 'Verifica que el nombre y especialidad tengan al menos 3 letras y el teléfono tenga 10 dígitos.';
+      return;
+    }
 
     this.api
       .actualizarPerfil({
         nombre: this.nombreCompleto.trim(),
         especialidad: this.especialidad.trim(),
-        telefono: soloDigitosTelefono
+        telefono: this.telefono
       })
       .subscribe({
         next: (actualizado) => {
@@ -59,12 +103,18 @@ export class MiPerfil implements OnInit {
           this.especialidad = actualizado.especialidad;
           this.telefono = actualizado.telefono;
           this.mostrarConfirmacion = true;
+          this.cdr.detectChanges();
         },
-        error: (err) => alert(err.error?.error || 'Error al guardar los cambios del perfil.')
+        error: (err) => {
+          this.mensajeError = err.error?.error || 'Error al guardar los cambios del perfil.';
+          this.cdr.detectChanges();
+        }
       });
   }
 
   cerrarConfirmacion(): void {
     this.mostrarConfirmacion = false;
   }
+
+  
 }

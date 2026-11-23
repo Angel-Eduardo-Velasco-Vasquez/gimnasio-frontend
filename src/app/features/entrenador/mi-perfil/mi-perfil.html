@@ -18,33 +18,68 @@
         <label for="nombreInput">Nombre Completo</label>
         <input
           id="nombreInput"
-          type="text"
           name="nombreCompleto"
+          type="text"
           [(ngModel)]="nombreCompleto"
-          required />
+          (input)="filtrarSoloLetras('nombreCompleto')"
+          maxlength="80"
+          placeholder="Ej. Carlos Méndez"
+        />
+        @if (avisoNombre) {
+          <small style="color: #ff5252; display: block; margin-top: 4px;">{{ avisoNombre }}</small>
+        } @else if (nombreCompleto.trim().length > 0 && nombreCompleto.trim().length < 3) {
+          <small style="color: #ff5252; display: block; margin-top: 4px;">Escribe al menos 3 letras.</small>
+        }
       </div>
 
       <div class="campo-perfil">
         <label for="especialidadInput">Especialidad</label>
         <input
           id="especialidadInput"
-          type="text"
           name="especialidad"
+          type="text"
           [(ngModel)]="especialidad"
-          required />
+          (input)="filtrarSoloLetras('especialidad')"
+          maxlength="60"
+          placeholder="Ej. CrossFit"
+        />
+        @if (avisoEspecialidad) {
+          <small style="color: #ff5252; display: block; margin-top: 4px;">{{ avisoEspecialidad }}</small>
+        } @else if (especialidad.trim().length > 0 && especialidad.trim().length < 3) {
+          <small style="color: #ff5252; display: block; margin-top: 4px;">Escribe al menos 3 letras.</small>
+        }
       </div>
 
       <div class="campo-perfil">
         <label for="telefonoInput">Teléfono de Contacto</label>
         <input
           id="telefonoInput"
-          type="text"
           name="telefono"
+          type="tel"
           [(ngModel)]="telefono"
-          required />
+          (input)="filtrarSoloNumeros()"
+          maxlength="10"
+          placeholder="10 dígitos (Ej. 9511234567)"
+        />
+        @if (avisoTelefono) {
+          <small style="color: #ff5252; display: block; margin-top: 4px;">{{ avisoTelefono }}</small>
+        }
       </div>
 
-      <button type="submit" class="btn-guardar">Guardar Cambios</button>
+      @if (mensajeError) {
+        <p style="color: #ff5252; font-size: 0.85rem; margin-top: 6px;">
+          {{ mensajeError }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        class="btn-guardar"
+        [disabled]="!formularioValido"
+        [style.opacity]="formularioValido ? '1' : '0.5'"
+      >
+        Guardar Cambios
+      </button>
     </form>
   </div>
 

@@ -306,7 +306,7 @@
   outline: none;
 }
 
-.btn-guardar-cambios {
+.btn-guardar-eval {
   align-self: center;
   margin-top: 6px;
   background-color: #0052b4;
@@ -317,4 +317,8 @@
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+.btn-guardar-eval:hover {
+  background-color: #003e8a;
 }
