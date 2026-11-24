@@ -1,0 +1,26 @@
+<div class="pantalla">
+  <a class="volver" routerLink="/login">&lt;</a>
+
+  <h1 class="titulo">REESTABLECER CONTRASEÑA</h1>
+
+  <form class="formulario" (ngSubmit)="reestablecer()">
+    <label for="correo">Ingrese su correo electrónico</label>
+    <input
+      id="correo"
+      name="correo"
+      type="email"
+      placeholder="Correo Electrónico"
+      [(ngModel)]="correo" />
+
+    <button type="submit" class="btn">Reestablecer</button>
+  </form>
+
+  @if (solicitudEnviada()) {
+    <div class="overlay">
+      <div class="modal">
+        <button class="cerrar" (click)="cerrarModal()">✕</button>
+        <h2>Solicitud Enviada</h2>
+      </div>
+    </div>
+  }
+</div>

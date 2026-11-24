@@ -1,0 +1,46 @@
+<div class="pantalla">
+  <div class="tarjeta">
+    <div class="tabs">
+      <button
+        type="button"
+        [class.activo]="tipo() === 'administrador'"
+        (click)="tipo.set('administrador')">
+        Administrador
+      </button>
+      <button
+        type="button"
+        [class.activo]="tipo() === 'entrenador'"
+        (click)="tipo.set('entrenador')">
+        Entrenador
+      </button>
+    </div>
+
+    <form class="formulario" (ngSubmit)="acceder()">
+      <label for="usuario">Usuario:</label>
+      <input
+        id="usuario"
+        name="usuario"
+        type="text"
+        placeholder="Nombre de usuario"
+        [(ngModel)]="usuario" />
+
+      <label for="password">Contraseña:</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Ingrese su contraseña"
+        [(ngModel)]="password" />
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn-acceder" [disabled]="cargando()">
+        {{ cargando() ? 'Entrando...' : 'Acceder' }}
+      </button>
+    </form>
+
+    <a class="olvide" routerLink="/restablecer">Olvide mi contraseña</a>
+  </div>
+</div>

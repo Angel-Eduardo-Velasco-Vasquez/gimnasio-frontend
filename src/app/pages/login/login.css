@@ -1,0 +1,89 @@
+.pantalla {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)),
+              #2b2b2b;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+.tarjeta {
+  width: min(420px, 90vw);
+  background: #efefef;
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.tabs button {
+  border: none;
+  background: #fff;
+  padding: 10px;
+  font-size: 16px;
+  color: #777;
+  border-bottom: 2px solid #ccc;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+}
+
+.tabs button.activo {
+  background: #f7efe6;
+  color: #222;
+  border-bottom-color: #999;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formulario label {
+  font-size: 14px;
+  color: #333;
+  margin-top: 8px;
+}
+
+.formulario input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #fff;
+}
+
+.error {
+  color: #c00;
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+.btn-acceder {
+  align-self: center;
+  margin-top: 20px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.olvide {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #222;
+  text-decoration: underline;
+  cursor: pointer;
+}
