@@ -2,11 +2,13 @@
   <div class="tarjeta">
     <div class="tabs">
       <button
+        type="button"
         [class.activo]="tipo() === 'administrador'"
         (click)="tipo.set('administrador')">
         Administrador
       </button>
       <button
+        type="button"
         [class.activo]="tipo() === 'entrenador'"
         (click)="tipo.set('entrenador')">
         Entrenador
@@ -34,7 +36,9 @@
         <p class="error">{{ error() }}</p>
       }
 
-      <button type="submit" class="btn-acceder">Acceder</button>
+      <button type="submit" class="btn-acceder" [disabled]="cargando()">
+        {{ cargando() ? 'Entrando...' : 'Acceder' }}
+      </button>
     </form>
 
     <a class="olvide" routerLink="/restablecer">Olvide mi contraseña</a>
