@@ -13,35 +13,37 @@
     <a class="btn-negro" routerLink="/registro-usuario">Agregar cliente</a>
   </div>
 
-  <table class="tabla">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Suscripción</th>
-        <th>Fecha de pago</th>
-        <th>Estatus</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (c of clientes(); track $index; let i = $index) {
+  <div class="tabla-scroll">
+    <table class="tabla">
+      <thead>
         <tr>
-          <td>{{ c.nombre }}</td>
-          <td>{{ c.suscripcion }}</td>
-          <td>{{ c.fechaPago }}</td>
-          <td>{{ c.estatus }}</td>
-          <td>
-            <button class="icono-btn" title="Editar">✏️</button>
-            <button class="icono-btn" title="Eliminar" (click)="pedirEliminar(i)">🗑️</button>
-          </td>
+          <th>Nombre</th>
+          <th>Suscripción</th>
+          <th>Fecha de pago</th>
+          <th>Estatus</th>
+          <th>Acciones</th>
         </tr>
-      } @empty {
-        <tr>
-          <td colspan="5">Sin clientes registrados</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (c of clientes(); track $index; let i = $index) {
+          <tr>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.suscripcion }}</td>
+            <td>{{ c.fechaPago }}</td>
+            <td>{{ c.estatus }}</td>
+            <td>
+              <button class="icono-btn" title="Editar">✏️</button>
+              <button class="icono-btn" title="Eliminar" (click)="pedirEliminar(i)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">Sin clientes registrados</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
 
 @if (indiceAEliminar() !== null) {

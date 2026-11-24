@@ -8,7 +8,7 @@ import { Clientes } from './pages/clientes/clientes';
 import { RegistroUsuario } from './pages/registro-usuario/registro-usuario';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'principal', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'principal', component: Principal },
   { path: 'restablecer', component: Restablecer },

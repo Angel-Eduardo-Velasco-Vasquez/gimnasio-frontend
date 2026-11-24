@@ -11,5 +11,8 @@
     <a routerLink="/clientes" routerLinkActive="activo" (click)="cerrar.emit()">Clientes</a>
   </nav>
 
-  <button class="cerrar" (click)="cerrarSesion()">← Cerrar sesión</button>
+  <div class="pie">
+    <button class="cerrar" (click)="cerrarSesion()">Cerrar sesión</button>
+    <button class="flecha" (click)="cerrar.emit()" aria-label="Cerrar menú">◀</button>
+  </div>
 </aside>

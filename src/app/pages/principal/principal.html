@@ -1,50 +1,42 @@
-<div class="layout">
-  <aside class="sidebar">
-    <h2 class="logo">FitGym App</h2>
+<app-sidebar [abierto]="menuAbierto()" (cerrar)="menuAbierto.set(false)" />
 
-    <nav>
-      <a routerLink="/principal" routerLinkActive="activo">Principal</a>
-      <a routerLink="/entrenadores" routerLinkActive="activo">Entrenador</a>
-      <a routerLink="/clientes" routerLinkActive="activo">Clientes</a>
-    </nav>
-
-    <button class="cerrar" (click)="cerrarSesion()">Cerrar sesión</button>
-  </aside>
-
-  <main class="contenido">
+<div class="pagina">
+  <header class="encabezado">
+    <button class="hamburguesa" (click)="menuAbierto.set(true)" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
     <h1 class="titulo">Bienvenido Administrador</h1>
-    <h2 class="subtitulo">Resumen general</h2>
+  </header>
 
-    <section class="stats">
-      @for (e of estadisticas; track e.etiqueta) {
-        <div class="stat">
-          <span class="icono">{{ e.icono }}</span>
-          <strong>{{ e.valor }}</strong>
-          <span>{{ e.etiqueta }}</span>
-        </div>
-      }
+  <h2 class="subtitulo" style="margin: 24px 0 20px;">Resumen general</h2>
+
+  <section class="stats">
+    @for (e of estadisticas; track e.etiqueta) {
+      <div class="stat">
+        <span class="icono">{{ e.icono }}</span>
+        <strong>{{ e.valor }}</strong>
+        <span>{{ e.etiqueta }}</span>
+      </div>
+    }
+  </section>
+
+  <div class="fila">
+    <section class="grafica">
+      <h3>Afluencia hoy</h3>
+      <div class="barras">
+        @for (b of afluencia; track b.label) {
+          <div class="barra-wrap">
+            <div class="barra" [style.height.%]="b.valor" [style.background]="b.color"></div>
+            <span>{{ b.label }}</span>
+          </div>
+        }
+      </div>
     </section>
 
-    <div class="fila">
-      <section class="grafica">
-        <h3>Afluencia hoy</h3>
-        <div class="barras">
-          @for (b of afluencia; track b.label) {
-            <div class="barra-wrap">
-              <div class="barra"
-                   [style.height.%]="b.valor"
-                   [style.background]="b.color"></div>
-              <span>{{ b.label }}</span>
-            </div>
-          }
-        </div>
-      </section>
-
-      <section class="accesos">
-        <h3>Accesos rápidos</h3>
-        <button class="btn-acceso" (click)="registrarCliente()">+ Registrar cliente</button>
-        <button class="btn-acceso" (click)="eliminarEntrenador()">− Eliminar entrenador</button>
-      </section>
-    </div>
-  </main>
+    <section class="accesos">
+      <h3>Accesos rápidos</h3>
+      <button class="btn-acceso" (click)="registrarCliente()">+ Registrar cliente</button>
+      <button class="btn-acceso" (click)="eliminarEntrenador()">− Eliminar entrenador</button>
+    </section>
+  </div>
 </div>

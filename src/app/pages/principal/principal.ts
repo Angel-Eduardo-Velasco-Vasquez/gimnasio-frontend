@@ -1,14 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { Sidebar } from '../../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-principal',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [Sidebar],
   templateUrl: './principal.html',
   styleUrl: './principal.css',
 })
 export class Principal {
   private router = inject(Router);
+
+  menuAbierto = signal(false);
 
   estadisticas = [
     { valor: '50', etiqueta: 'Usuarios activos', icono: '👤' },
@@ -24,12 +27,8 @@ export class Principal {
     { label: 'Otoño', valor: 30, color: '#ffdf5e' },
   ];
 
-  cerrarSesion() {
-    this.router.navigate(['/login']);
-  }
-
   eliminarEntrenador() {
-    alert('Aquí iría la lógica para eliminar entrenador');
+    this.router.navigate(['/entrenadores']);
   }
 
   registrarCliente() {
