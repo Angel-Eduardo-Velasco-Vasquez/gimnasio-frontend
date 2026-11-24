@@ -33,6 +33,6 @@ export class Principal {
   }
 
   registrarCliente() {
-    alert('Aquí iría la lógica para registrar cliente');
+    this.router.navigate(['/registro-usuario']);
   }
 }

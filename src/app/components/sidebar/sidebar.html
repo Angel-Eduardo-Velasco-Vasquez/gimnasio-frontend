@@ -1,0 +1,15 @@
+@if (abierto()) {
+  <div class="fondo" (click)="cerrar.emit()"></div>
+}
+
+<aside class="sidebar" [class.abierto]="abierto()">
+  <h2 class="logo">FitGym App</h2>
+
+  <nav>
+    <a routerLink="/principal" routerLinkActive="activo" (click)="cerrar.emit()">Principal</a>
+    <a routerLink="/entrenadores" routerLinkActive="activo" (click)="cerrar.emit()">Entrenador</a>
+    <a routerLink="/clientes" routerLinkActive="activo" (click)="cerrar.emit()">Clientes</a>
+  </nav>
+
+  <button class="cerrar" (click)="cerrarSesion()">← Cerrar sesión</button>
+</aside>

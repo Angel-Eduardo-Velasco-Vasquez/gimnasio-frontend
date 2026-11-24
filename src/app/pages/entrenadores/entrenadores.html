@@ -1,0 +1,60 @@
+<app-sidebar [abierto]="menuAbierto()" (cerrar)="menuAbierto.set(false)" />
+
+<div class="pagina">
+  <header class="encabezado">
+    <button class="hamburguesa" (click)="menuAbierto.set(true)" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <h1 class="titulo">Administrar Entrenadores</h1>
+  </header>
+
+  <div class="barra">
+    <h2 class="subtitulo">Entrenadores</h2>
+    <a class="btn-negro" routerLink="/entrenadores/nuevo">Agregar entrenador</a>
+  </div>
+
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Tiempo activo</th>
+        <th>Especialidad</th>
+        <th>Clientes</th>
+        <th>Estatus</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of entrenadores(); track $index; let i = $index) {
+        <tr>
+          <td>{{ e.nombre }}</td>
+          <td>{{ e.tiempo }}</td>
+          <td>{{ e.especialidad }}</td>
+          <td>{{ e.clientes }}</td>
+          <td>{{ e.estatus }}</td>
+          <td>
+            <button class="icono-btn" title="Editar">✏️</button>
+            <button class="icono-btn" title="Eliminar" (click)="pedirEliminar(i)">🗑️</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">Sin entrenadores registrados</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (indiceAEliminar() !== null) {
+  <div class="modal-fondo">
+    <div class="modal">
+      <h3>¿Estás seguro de que deseas eliminar al entrenador?</h3>
+      <p><em>Esta acción no se puede deshacer.</em></p>
+      <div class="modal-botones">
+        <button class="btn-rojo" (click)="confirmarEliminar()">Eliminar</button>
+        <button class="btn-verde" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+}
