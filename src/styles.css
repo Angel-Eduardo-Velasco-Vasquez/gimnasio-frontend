@@ -1,2 +1,251 @@
-/* You can add global styles to this file, and also import other style files */
-body { margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+  background: #f3f3f3;
+  color: #111;
+}
+
+.pagina {
+  padding: 24px 32px;
+  min-height: 100vh;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.hamburguesa {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 4px;
+}
+
+.hamburguesa span {
+  display: block;
+  width: 40px;
+  height: 5px;
+  background: #e00;
+  border-radius: 3px;
+}
+
+.titulo {
+  background: #ffe600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 800;
+  margin: 0;
+  word-break: break-word;
+}
+
+.subtitulo {
+  background: #6ec1f0;
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 10px;
+  font-size: 22px;
+  margin: 0;
+}
+
+.barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 28px 0 16px;
+}
+
+.btn-negro,
+.btn-verde,
+.btn-rojo {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-negro { background: #000; }
+.btn-verde { background: #7ed957; color: #000; }
+.btn-rojo  { background: #e00; }
+
+/* Tablas */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+  border: 2px solid #000;
+  padding: 14px;
+  text-align: center;
+}
+
+.tabla th { background: #fff; }
+.tabla td { background: #c8d0da; }
+
+.icono-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 6px;
+}
+
+/* Formularios */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grid-formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 48px;
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 18px;
+}
+
+.campo input,
+.campo select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #fff;
+}
+
+.botones {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+/* Modales */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 460px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal h3 {
+  font-size: 26px;
+  margin: 12px 0;
+}
+
+.modal-botones {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.error-texto {
+  color: #c00;
+  font-size: 14px;
+}
+
+/* Tabla con scroll horizontal en pantallas chicas */
+.tabla-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-scroll .tabla {
+  min-width: 640px;
+}
+
+/* Formularios en una sola columna en tablet y celular */
+@media (max-width: 768px) {
+  .grid-formulario {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .encabezado {
+    gap: 12px;
+  }
+
+  .barra {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pagina {
+    padding: 16px;
+  }
+
+  .botones {
+    justify-content: stretch;
+  }
+
+  .botones button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 24px 20px;
+  }
+
+  .modal h3 {
+    font-size: 20px;
+  }
+}

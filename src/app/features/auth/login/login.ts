@@ -40,7 +40,7 @@ export class Login {
         if (rolApi === 'ENTRENADOR') {
           this.router.navigate(['/entrenador/clases-dia']);
         } else {
-          this.router.navigate(['/admin']);
+          this.router.navigate(['/principal']);
         }
       },
       error: (err) => {
